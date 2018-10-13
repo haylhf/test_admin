@@ -10,14 +10,14 @@ body {
 .rootDiv {
     perspective: 1000px;
     /*perspective-origin: 50% 200px;*/ /*上下角度视角 */
-    perspective-origin: 50%;
+    perspective-origin: 50% 100px; /*100px 调上下立体效果*/
 }
 
 .homeDiv .container {
-    top: 300px;
+    top: 0px;   /*调上下立体效果*/
+    margin-top: 300px;
     width: 200px;
     height: 200px;
-    /*margin: 100px auto;*/
     position: relative;
     transform-style: preserve-3d;
     transition: all 1s linear;

@@ -1,11 +1,16 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
-    <div class="homeDiv">
-        <div id="root" class="rootDiv">
-            <div id="container" class="container">
+    <div>
+        <video :src="getBgVideo()" style="right:0; bottom: 0; z-index: -100;min-width: 100%;min-height: 100%;position: fixed;height: auto;width: auto;-webkit-filter: grayscale(20%)"
+               loop="loop" autoplay="autoplay" muted></video>
+        <div class="homeDiv">
+            <div id="root" class="rootDiv">
+                <div id="container" class="container">
 
+                </div>
             </div>
         </div>
     </div>
+
 </template>
 
 <script>
@@ -73,6 +78,7 @@
 
     var _this
     var currentInterval
+    var bg_video = require('../assets/img/bg.mp4');
     export default {
         name: "home",
         components: {},
@@ -80,7 +86,11 @@
             _this = this;
             return {}
         },
-        methods: {},
+        methods: {
+            getBgVideo() {
+                return bg_video;
+            }
+        },
         computed: {},
         filters: {},
         created: function () {

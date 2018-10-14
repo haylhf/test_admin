@@ -34,7 +34,7 @@ module.exports = {
       loader: 'style-loader!css-loader'
 	  },
 	  {
-      test: /\.(png|jpg|gif|svg|bmp|eot|woff|woff2|ttf)$/,
+      test: /\.(png|jpg|gif|svg|bmp|eot|woff|woff2|ttf|mp4)$/,
       loader: 'file-loader',
       options: {
         name: '[name].[ext]?[hash]'

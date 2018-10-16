@@ -6,12 +6,20 @@
         <div class="homeDiv" >
             <div id="root" class="rootDiv" >
                 <div id="container" class="container" >
-
-                </div >
-            </div >
+                </div ></div >
+        </div >
+        <div >
+            <el-form >
+                <el-col :span="24" >
+                    <el-form-item label="内容：" label-width="100" style="width: 100%" >
+                        <el-input v-model="sendText" type="textarea"
+                                  :rows="5" clearable style="font-size: 18px" ></el-input >
+                    </el-form-item >
+                </el-col >
+                <el-button type="primary" @click="onSend" size="small" >Send</el-button >
+            </el-form >
         </div >
     </div >
-
 </template >
 
 <script >
@@ -27,6 +35,47 @@
 	    });
 	    return element;
     };
+
+    var hostname = MqttServer,
+		    port = ServerPort,
+		    clientId = `client-${newGuid()}`,
+		    timeout = 5,
+		    keepAlive = 100,
+		    cleanSession = false,
+		    ssl = false,
+		    userName = 'admin',
+		    password = 'password',
+		    sendTopic = "sign_feedback";
+    var client = new Paho.MQTT.Client(hostname, port, clientId);
+    //建立客户端实例
+    var options = {
+	    invocationContext: {
+		    host: hostname,
+		    port: port,
+		    path: client.path,
+		    clientId: clientId
+	    },
+	    timeout: timeout,
+	    keepAliveInterval: keepAlive,
+	    cleanSession: cleanSession,
+	    useSSL: ssl,
+	    userName: userName,
+	    password: password,
+	    onSuccess: onConnect,
+	    onFailure: function (e) {
+		    console.log(`connect failure: ${e}`);
+	    },
+    };
+
+    function onConnect() {
+	    console.log("connect successfully");
+	    for (let item of ServerTOPIC)//订阅主题
+	    {
+		    console.log(`subscribed server topic: ${item}`);
+		    client.subscribe(item);
+	    }
+    };
+
     var isActived = true;
     window.ondeactivate = ()=> {
 	    isActived = false;
@@ -40,10 +89,12 @@
     window.onfocus = ()=> {
 	    isActived = true;
     };
-
     window.onload = function () {
+	    client.connect(options);//连接服务器并注册连接成功处理事件
+	    client.onConnectionLost = onConnectionLost;//注册连接断开处理事件
+	    client.onMessageArrived = onMessageArrived;//注册消息接收处理事件
 
-	    _this = this;
+
 	    var $ = function (selector) {
 		    return document.querySelector(selector);
 	    };
@@ -75,36 +126,66 @@
 //			      console.log(`${i} image,  rotation degree:${j * rotate}`);
 			    transform($(`#div${i}`), `rotateY(${j * rotate}deg) translateZ(${transZ}px)`);
 		    });
-		    console.log(JSON.stringify(container.innerHTML))
+		    //console.log(JSON.stringify(container.innerHTML))
 	    }
     };
-    //      function doAnimationTimer () {
-    //          var id = window.setTimeout(()=> {
-    //              if (container != null) {
-    //                  transform(container, `rotateY(${(1 * rotate * ++indexPiece)}deg)`); //改正负确定旋转方向
-    //              }
-    //              clearTimeout(id);
-    //              doAnimationTimer();
-    //          }, 1500);
-    //      }
 
+    function onConnectionLost(responseObject) {
+	    if (responseObject.errorCode !== 0) {
+		    console.log("onConnectionLost:" + responseObject.errorMessage);
+		    console.log("连接已断开");
+	    }
+    }
+
+    function onMessageArrived(message) {
+	    console.log("收到消息:" + message.payloadString);
+	    console.log("主题：" + message.destinationName);
+	    var data = "";
+	    try {
+		    data = jQuery.parseJSON(message.payloadString);
+            console.log("解析出来的：data：" + JSON.stringify(data));
+        } catch (e) {
+		    console.log(e);
+	    }
+	    switch (message.destinationName)
+	    {
+		    case ServerPort[0]: //statff
+			    break;
+		    case ServerPort[1]://vip
+			    break;
+            default:
+                console.log("未知主题消息...")
+                break;
+	    }
+    }
 
     import Vue from 'vue'
 
     var _this
     var currentInterval
-    var bg_video = require('../assets/img/bg.mp4');
     export default {
 	    name: "home",
 	    components: {},
 	    data() {
 		    _this = this;
-		    return {}
+		    return {
+			    sendText: "Hello mqtt",
+		    }
 	    },
 	    methods: {
 		    getBgVideo() {
-			    return bg_video;
-		    }
+			    return require('../assets/img/bg.mp4');
+		    },
+		    onSend() {
+			    let strMsg = _this.sendText;// document.getElementById("msg").value;
+			    if (strMsg) {
+				    let message = new Paho.MQTT.Message(strMsg);
+				    message.destinationName = sendTopic; //发送主题
+				    client.send(message);
+				    console.log(`send data: ${strMsg}`)
+				    _this.sendText = "";
+			    }
+		    },
 	    },
 	    computed: {},
 	    filters: {},
@@ -121,7 +202,7 @@
 				    if (container != null) {
 					    if (isActived) {
 						    transform(container, `rotateY(${(1 * rotate * ++indexPiece)}deg)`); //改正负确定旋转方向
-						    console.log(`indexPiece: ${indexPiece}`);
+						    //console.log(`indexPiece: ${indexPiece}`);
 					    }
 				    }
 				    clearTimeout(id);

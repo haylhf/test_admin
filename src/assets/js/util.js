@@ -351,6 +351,12 @@ function getAudioType(fileName) {
 	return audioType;
 }
 
+function sleep(delay) {
+    var start = (new Date()).getTime();
+    while ((new Date()).getTime() - start < delay) {
+        continue;
+    }
+}
 
 Date.prototype.format = function (format) {
 	var o = {

@@ -26,16 +26,15 @@
                     <div class="switcher-wrap slider" >
                         <a class="prev jQ_sliderPrev" href="" ></a >
                         <a class="next jQ_sliderNext" href="" ></a >
-                        <ul id="img-slider" style="height: 800px; " >
-                            <li class="li_img text-center" v-for="u in userList" >
-                                <img :src="u.photo" style="width: 200px;height: 200px" />
-                                <div class="col-center-block text-center label" >
-                                    <span >
+                        <ul id="img-slider" style="height: 800px" >
+                            <li class="li_img text-center" v-for="u in userList">
+                                <img :src="u.photo" style="width: 225px;height: 225px;border-radius: 50%;align-items: center;justify-content: center;overflow: hidden;margin-top: 60px" />
+                                <div class="col-center-block text-center label">
+                                    <div style="min-height: 80px;margin-top: 50px">
                                         {{u.name}}
-                                    </span >
-                                    <br />
-                                    <span >
-                                        {{u.company}}
+                                    </div >
+                                    <span style="font-size: 24px;">
+                                        {{u.signTime}}
                                     </span >
                                 </div >
                             </li >
@@ -206,12 +205,16 @@
 		    let signData = signDataList[i];
 		    let data = Object.assign(signData.person.person_information);
 		    try {
-			    data.signTime = signData.person.upload_time.format("yyyy-MM-dd HH:mm:ss");
+			    data.signTime = new Date(signData.timestamp * 1000).format("hh:mm:ss");
 		    } catch (e) {
 		    }
 		    data.device_id = signData.device_id;
-		    data.photo = require('../assets/img/male.png'); //`http://api.vaiwan.com:8081/image/${signData.person.face_list[0].face_image_id}`;
-		    _this.userList.push(data);
+		    //data.photo = require('../assets/img/male.png'); //`http://api.vaiwan.com:8081/image/${signData.person.face_list[0].face_image_id}`;
+		    data.photo = "http://192.168.0.119" + ":9812/image/" + signData.person.face_list[0].face_image_id; //`http://api.vaiwan.com:8081/image/${signData.person.face_list[0].face_image_id}`;
+		    while(_this.userList.length >= 3) {
+		        _this.userList.shift();
+            }
+            _this.userList.push(data);
 	    }
 	    let index = _this.userList.length;
 	    let delay = 2000;
@@ -321,172 +324,7 @@
 
 		    }, 1000);//定时器
 
-		    onStaffSign(JSON.parse(`[
-  {
-    "device_id": "string",
-    "face_id": "string",
-    "face_image_id": "string",
-    "identity": "STRANGER",
-    "person": {
-      "face_list": [
-        {
-          "face_id": "string",
-          "face_image_id": "string",
-          "scene_image_id": "string"
-        }
-      ],
-      "identity": "STAFF",
-      "meta": {},
-      "person_id": "string",
-      "person_information": {
-        "birthday": "string",
-        "company": "string",
-        "employed_date": "string",
-        "id": "string",
-        "identity_number": "string",
-        "name": "string1",
-        "phone": "string",
-        "remark": "string",
-        "visit_end_timestamp": 0,
-        "visit_purpose": "0",
-        "visit_start_timestamp": 0,
-        "visit_time_type": "0",
-        "visitee_name": "string"
-      },
-      "tag_id_list": [
-        "string"
-      ],
-      "upload_time": 0
-    },
-    "scene_image_id": "string",
-    "score": 0,
-    "timestamp": 0,
-    "track_id": "string"
-  },
-  {
-    "device_id": "string",
-    "face_id": "string",
-    "face_image_id": "string",
-    "identity": "STRANGER",
-    "person": {
-      "face_list": [
-        {
-          "face_id": "string",
-          "face_image_id": "string",
-          "scene_image_id": "string"
-        }
-      ],
-      "identity": "STAFF",
-      "meta": {},
-      "person_id": "string",
-      "person_information": {
-        "birthday": "string",
-        "company": "string",
-        "employed_date": "string",
-        "id": "string",
-        "identity_number": "string",
-        "name": "string2",
-        "phone": "string",
-        "remark": "string",
-        "visit_end_timestamp": 0,
-        "visit_purpose": "0",
-        "visit_start_timestamp": 0,
-        "visit_time_type": "0",
-        "visitee_name": "string"
-      },
-      "tag_id_list": [
-        "string"
-      ],
-      "upload_time": 0
-    },
-    "scene_image_id": "string",
-    "score": 0,
-    "timestamp": 0,
-    "track_id": "string"
-  },
-  {
-    "device_id": "string",
-    "face_id": "string",
-    "face_image_id": "string",
-    "identity": "STRANGER",
-    "person": {
-      "face_list": [
-        {
-          "face_id": "string",
-          "face_image_id": "string",
-          "scene_image_id": "string"
-        }
-      ],
-      "identity": "STAFF",
-      "meta": {},
-      "person_id": "string",
-      "person_information": {
-        "birthday": "string",
-        "company": "string",
-        "employed_date": "string",
-        "id": "string",
-        "identity_number": "string",
-        "name": "string3",
-        "phone": "string",
-        "remark": "string",
-        "visit_end_timestamp": 0,
-        "visit_purpose": "0",
-        "visit_start_timestamp": 0,
-        "visit_time_type": "0",
-        "visitee_name": "string"
-      },
-      "tag_id_list": [
-        "string"
-      ],
-      "upload_time": 0
-    },
-    "scene_image_id": "string",
-    "score": 0,
-    "timestamp": 0,
-    "track_id": "string"
-  },
-  {
-    "device_id": "string",
-    "face_id": "string",
-    "face_image_id": "string",
-    "identity": "STRANGER",
-    "person": {
-      "face_list": [
-        {
-          "face_id": "string",
-          "face_image_id": "string",
-          "scene_image_id": "string"
-        }
-      ],
-      "identity": "STAFF",
-      "meta": {},
-      "person_id": "string",
-      "person_information": {
-        "birthday": "string",
-        "company": "string",
-        "employed_date": "string",
-        "id": "string",
-        "identity_number": "string",
-        "name": "string3",
-        "phone": "string",
-        "remark": "string",
-        "visit_end_timestamp": 0,
-        "visit_purpose": "0",
-        "visit_start_timestamp": 0,
-        "visit_time_type": "0",
-        "visitee_name": "string"
-      },
-      "tag_id_list": [
-        "string"
-      ],
-      "upload_time": 0
-    },
-    "scene_image_id": "string",
-    "score": 0,
-    "timestamp": 0,
-    "track_id": "string"
-  }
-]`))
+ 		    // onStaffSign(JSON.parse('[{"device_id":"192.168.0.100","face_id":"9204231738438451641","face_image_id":"5bc765dec80ea76ec78da5e7","identity":"STAFF","person":{"face_list":[{"face_id":"9204231738438451641","face_image_id":"5bc74fc0a628822486e97696","scene_image_id":"5bc74fc0a628822486e97695"}],"identity":"STAFF","meta":{},"person_id":"5b850aa1a628820dc82d1299","person_information":{"birthday":"2018-08-28","company":"","employed_date":"2018-08-28","id":"003","name":"胡通","phone":"15715766877"},"tag_id_list":["5b816826a6288212951d6417"],"upload_time":1535445665},"scene_image_id":"5bc765dec80ea76ec78da5e8","score":92.18068902804472,"timestamp":1539794398,"track_id":"1539794397767"},{"device_id":"192.168.0.100","face_id":"9204231738438451641","face_image_id":"5bc765dcc80ea76ec78da5e5","identity":"STAFF","person":{"face_list":[{"face_id":"9204231738438451641","face_image_id":"5bc74fc0a628822486e97696","scene_image_id":"5bc74fc0a628822486e97695"}],"identity":"STAFF","meta":{},"person_id":"5b850aa1a628820dc82d1299","person_information":{"birthday":"2018-08-28","company":"","employed_date":"2018-08-28","id":"003","name":"胡通","phone":"15715766877"},"tag_id_list":["5b816826a6288212951d6417"],"upload_time":1535445665},"scene_image_id":"5bc765dcc80ea76ec78da5e6","score":94.44834356335379,"timestamp":1539794396,"track_id":"1539794396076"},{"device_id":"192.168.0.100","face_id":"9204231738438451641","face_image_id":"5bc765dec80ea76ec78da5e7","identity":"STAFF","person":{"face_list":[{"face_id":"9204231738438451641","face_image_id":"5bc74fc0a628822486e97696","scene_image_id":"5bc74fc0a628822486e97695"}],"identity":"STAFF","meta":{},"person_id":"5b850aa1a628820dc82d1299","person_information":{"birthday":"2018-08-28","company":"","employed_date":"2018-08-28","id":"003","name":"胡通","phone":"15715766877"},"tag_id_list":["5b816826a6288212951d6417"],"upload_time":1535445665},"scene_image_id":"5bc765dec80ea76ec78da5e8","score":92.18068902804472,"timestamp":1539794398,"track_id":"1539794397767"},{"device_id":"192.168.0.100","face_id":"9204231738438451641","face_image_id":"5bc765dcc80ea76ec78da5e5","identity":"STAFF","person":{"face_list":[{"face_id":"9204231738438451641","face_image_id":"5bc74fc0a628822486e97696","scene_image_id":"5bc74fc0a628822486e97695"}],"identity":"STAFF","meta":{},"person_id":"5b850aa1a628820dc82d1299","person_information":{"birthday":"2018-08-28","company":"","employed_date":"2018-08-28","id":"003","name":"胡通","phone":"15715766877"},"tag_id_list":["5b816826a6288212951d6417"],"upload_time":1535445665},"scene_image_id":"5bc765dcc80ea76ec78da5e6","score":94.44834356335379,"timestamp":1539794396,"track_id":"1539794396076"}]'))
 	    },
 	    destroyed: function () {
 		    clearInterval(currentInterval);

@@ -110,13 +110,13 @@ blockquote, q {
     border-radius: 0 0 4px 4px;
     /*background: #10af8b;*/
     position: absolute;
-    bottom: 80px;
+    bottom: 100px;
     left: 0;
     right: 0;
     font-weight: 400;
     text-align: center;
     /*color: #fff;*/
-    font-size: 150%;
+    font-size: 200%;
 }
 
 #img-slider .li_img:first-child {

@@ -113,7 +113,7 @@
 								{
 									startingChild: startingChild,
 									bearing: startBearing,
-									oppositeOfFocusBearing: methods.normalize.apply(null, [settings.focusBearing - 180]),
+									oppositeOfFocusBearing: methods.normalize.apply(null, [settings.focusBearing + 180]),
 									dragBearing: startBearing,
 									period: period
 								}

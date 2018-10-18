@@ -350,6 +350,13 @@ function getAudioType(fileName) {
 	}
 	return audioType;
 }
+jQuery.fn.redraw = function(){
+	jQuery(this).each(function(){
+		this.style.display='none';
+		this.style.display='block';
+	});
+};
+
 
 function sleep(delay) {
     var start = (new Date()).getTime();

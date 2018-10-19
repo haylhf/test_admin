@@ -43,7 +43,21 @@
                 </div >
             </div >
         </div >
-
+        <table style="width: 100%;height: 200px; position: fixed;bottom: 0;" >
+            <tr >
+                <td style="width: 5%;" ></td >
+                <td style="text-align: center; vertical-align: middle" >
+                    <div class="center-block text-center" v-for="u in recentList"
+                         style="float: right; border: solid lightgoldenrodyellow 0.5px;margin-left: 5px;margin-right: 5px;" >
+                        <img :src="u.photo"
+                             style="width: 150px;height: 150px;
+                             margin-left: 5px;margin-right: 5px; border-radius: 50%;
+                             align-items: center;justify-content: center;" >
+                    </div >
+                </td >
+                <td style="width: 5%;" ></td >
+            </tr >
+        </table >
     </div >
 
 </template >
@@ -224,6 +238,7 @@
 			    data.photo = require('../assets/img/male.png'); //`http://api.vaiwan.com:8081/image/${signData.person.face_list[0].face_image_id}`;
 			    //data.photo = "http://192.168.0.119" + ":9812/image/" + signData.person.face_list[0].face_image_id; //`http://api.vaiwan.com:8081/image/${signData.person.face_list[0].face_image_id}`;
 			    dataList.push(data);
+
 		    }
 		    let promise = new Promise(function (resolve, reject) {
 			    showUserAndPlay(dataList);
@@ -287,11 +302,17 @@
 				    }
 				    isneedPlay = true;
 			    }
+			    if (_this.recentList.length >= 10) {
+				    _this.recentList.splice(_this.recentList.length - 1, 1);
+			    }
+			    _this.recentList.push(Object.assign(data));
+
 			    _this.userList.splice(nextIndex, 1, Object.assign(data))
 			    emptyList.splice(emptyList.indexOf(nextIndex), 1)
 			    if (isneedPlay) {
 				    playAnimationToNext();
 			    }
+
 		    }
 		    if (removeToIndex > 0) {
 			    dataList.splice(0, removeToIndex);
@@ -370,7 +391,8 @@
 			    title: HOME_SCREEN_TITLE,
 			    currentTime: "",
 			    staffNum: 0,
-			    signInNum: 0
+			    signInNum: 0,
+			    recentList: [],
 		    }
 	    },
 	    methods: {
@@ -451,32 +473,32 @@
 		    currentInterval = setInterval(function doAnimation() {
 
 			    _this.currentTime = new Date().format("MM月dd日 hh:mm");
-//			    $.ajax({
-//				    url: HOST + "user/getStaffNum",
-//				    type: 'GET',
-//				    dataType: 'json',
-//				    success: function (data) {
-//					    if (data.code == 200) {
-//						    _this.staffNum = data.data;
-//					    }
-//				    },
-//				    error: function (data) {
-//
-//				    }
-//			    })
-//			    $.ajax({
-//				    url: HOST + "user/getStaffSignInNum",
-//				    type: 'GET',
-//				    dataType: 'json',
-//				    success: function (data) {
-//					    if (data.code == 200) {
-//						    _this.signInNum = data.data;
-//					    }
-//				    },
-//				    error: function (data) {
-//
-//				    }
-//			    })
+                $.ajax({
+                    url: HOST + "user/getStaffNum",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.code == 200) {
+                            _this.staffNum = data.data;
+                        }
+                    },
+                    error: function (data) {
+
+                    }
+                })
+                $.ajax({
+                    url: HOST + "user/getStaffSignInNum",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.code == 200) {
+                            _this.signInNum = data.data;
+                        }
+                    },
+                    error: function (data) {
+
+                    }
+                })
 
 		    }, 1000);//定时器
 

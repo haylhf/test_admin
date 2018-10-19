@@ -68,8 +68,8 @@ Date.prototype.toJSON = function () {
 }
 
 function newGuid() {
-	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-		var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+		var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
 		return v.toString(16);
 	});
 }
@@ -350,19 +350,18 @@ function getAudioType(fileName) {
 	}
 	return audioType;
 }
-jQuery.fn.redraw = function(){
-	jQuery(this).each(function(){
-		this.style.display='none';
-		this.style.display='block';
+jQuery.fn.redraw = function () {
+	jQuery(this).each(function () {
+		this.style.display = 'none';
+		this.style.display = 'block';
 	});
 };
 
-
 function sleep(delay) {
-    var start = (new Date()).getTime();
-    while ((new Date()).getTime() - start < delay) {
-        continue;
-    }
+	var start = (new Date()).getTime();
+	while ((new Date()).getTime() - start < delay) {
+		continue;
+	}
 }
 
 Date.prototype.format = function (format) {

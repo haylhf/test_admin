@@ -17,6 +17,6 @@ export default
     {
         path: '*',
         redirect: '/home',
-        hidden: true
+        hidden: true,
     },
 ]

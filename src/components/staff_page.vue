@@ -23,11 +23,13 @@
         <table style="width: 100%;height: 180px; position: fixed;bottom: 0;" >
             <tr >
                 <td style="width: 5%;" ></td >
-                <td style="text-align: center; vertical-align: middle;background-color: red;" v-for="u in recentList" >
-                      <img :src="u.photo"
-                           style="width: 120px;height: 120px;
-                      margin-left: 5px;margin-right: 5px; border-radius: 50%;
-                      align-items: center;justify-content: center;" >
+                <td style="text-align: center; vertical-align: middle;" v-for="u in recentList" >
+                    <div class="text-center" style="width: 120px;">
+                        <img  v-if="u.photo!=null" :src="u.photo"
+                              style="width: 120px;height: 120px;
+                          margin-left: 5px;margin-right: 5px; border-radius: 50%;
+                          align-items: center;justify-content: center;" >
+                    </div>
                 </td >
                 <td style="width: 5%;" ></td >
             </tr >

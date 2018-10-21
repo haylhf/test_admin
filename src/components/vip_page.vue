@@ -14,7 +14,7 @@
                                 </div >
                                 <span style="font-size: 24px;" >
                                         {{u.signTime}}-{{u.index}}
-                                    </span >
+                                </span >
                             </div >
                         </li >
                     </ul >
@@ -25,12 +25,12 @@
             <tr >
                 <td style="width: 5%;" ></td >
                 <td style="text-align: center; vertical-align: middle;" v-for="u in recentList" >
-                    <div>
-                        <img :src="u.photo"
+                    <div style="width: 120px;">
+                        <img  v-if="u.photo!=null" :src="u.photo"
                                style="width: 120px;height: 120px;
                           margin-left: 5px;margin-right: 5px; border-radius: 50%;
                           align-items: center;justify-content: center;" >
-                        <div style="font-weight: bold;margin-top: 10px;color: orange">VIP</div>
+                        <div  v-if="u.photo!=null" style="font-weight: bold;margin-top: 10px;color: orange">VIP</div>
                     </div>
                 </td >
                 <td style="width: 5%;" ></td >

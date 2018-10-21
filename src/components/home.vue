@@ -191,7 +191,7 @@
 			    currentTime: "",
 			    staffNum: 0,
 			    signInNum: 0,
-			    isShowVIP: true,
+			    isShowVIP: false,
 		    }
 	    },
 	    methods: {

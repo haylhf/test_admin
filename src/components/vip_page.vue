@@ -1,221 +1,74 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml" >
-    <div >
-
-        <div id="tour" class="zebra" >
-            <div class="wrap" >
-                <div class="switcher-wrap slider" >
-                    <ul id="img-slider" style="height: 800px" >
-                        <li class="li_img text-center" v-for="u in userList" style="float: left" >
-                            <img :src="u.photo"
-                                 style="width: 225px;height: 225px;border-radius: 50%;align-items: center;justify-content: center;overflow: hidden;margin-top: 60px" />
-                            <div class="col-center-block text-center label" >
-                                <div style="min-height: 80px;margin-top: 50px" >
-                                    {{u.name}}
-                                </div >
-                                <span style="font-size: 24px;" >
-                                        {{u.signTime}}-{{u.index}}
-                                </span >
-                            </div >
-                        </li >
-                    </ul >
-                </div >
-            </div >
-        </div >
-        <table style="width: 100%;height: 180px; position: fixed;bottom: 0;" >
-            <tr >
-                <td style="width: 5%;" ></td >
-                <td style="text-align: center; vertical-align: middle;" v-for="u in recentList" >
-                    <div style="width: 120px;">
-                        <img  v-if="u.photo!=null" :src="u.photo"
-                               style="width: 120px;height: 120px;
-                          margin-left: 5px;margin-right: 5px; border-radius: 50%;
-                          align-items: center;justify-content: center;" >
-                        <div  v-if="u.photo!=null" style="font-weight: bold;margin-top: 10px;color: orange">VIP</div>
+    <div>
+        <el-row>
+            <el-col :span="6" style="margin-top:250px">
+                <div style=" color: white;font-size: x-large;margin-left: 86px">
+                    贵宾到访记录
+                </div>
+                <img src="../assets/img/line_start.png" style="margin-top: -10px"/>
+                <div style="margin-top: 20px;margin-bottom: 20px;margin-left: 18px">
+                    <div v-for=" item in recentVipList">
+                        <el-row>
+                            <el-col :span="3">
+                                <div :style="getSmallPhoneBg()">
+                                    <img  v-if="item.photo!=null" :src="item.photo"
+                                          style="width: 80px;height: 80px;border-radius: 50%;align-items: center;justify-content: center;margin-top: 5px;margin-left: 5px" >
+                                </div>
+                            </el-col>
+                            <el-col :span="21" style="margin-top: 20px">
+                                <div>
+                                    <img src="../assets/img/name_bar.png" style="margin-left: -2px">
+                                    <div style="color: white;font-size: 24px; margin-left: 50px;margin-top: -40px">{{item.name}}</div>
+                                </div>
+                            </el-col>
+                        </el-row>
                     </div>
-                </td >
-                <td style="width: 5%;" ></td >
-            </tr >
-        </table >
+                </div>
+                <img src="../assets/img/line_end.png"/>
+            </el-col>
+            <el-col :span="12">
+                <el-row style="text-align: center">
+                    <el-col :span="8" style="text-align: center;margin-top: 260px" >
+                        <div :style="getShowPhoneBg()">
+                            <img  v-if="showVipList.length >1 && showVipList[1].photo!=null" :src="showVipList[1].photo"
+                                  style="width: 255px;height: 255px;border-radius: 50%;align-items: center;justify-content: center;margin-top: 72px;" >
+                        </div>
+                        <div v-if="showVipList.length >1 && showVipList[1].name!=null"  style="color: white;font-size: 64px;margin-top: -10px">{{showVipList[1].name}}</div>
+                        <img :src="vipPic" style="margin-top: 20px; width: 100%"/>
+                        <img :src="vipPicShadow" style="margin-top: 10px; width: 90%"/>
+                    </el-col>
+                    <el-col :span="8" style="text-align: center;margin-top: 150px" >
+                        <div :style="getShowPhoneBg()">
+                            <img  v-if="showVipList.length >0 && showVipList[0].photo!=null" :src="showVipList[0].photo"
+                                  style="width:255px;height: 255px;border-radius: 50%;align-items: center;justify-content: center;margin-top: 72px" >
+                        </div>
+                        <div v-if="showVipList.length >0 && showVipList[0].name!=null" style="color: white;font-size: 64px;margin-top: -10px">{{showVipList[0].name}}</div>
+                        <img :src="vipPic" style="margin-top: 20px; width: 100%"/>
+                        <img :src="vipPicShadow" style="margin-top: 30px; width: 90%"/>
+                    </el-col>
+                    <el-col :span="8" style="text-align: center;margin-top: 260px">
+                        <div :style="getShowPhoneBg()">
+                            <img  v-if="showVipList.length >2 && showVipList[2].photo!=null" :src="showVipList[2].photo"
+                                  style="width: 255px;height: 255px;border-radius: 50%;align-items: center;justify-content: center;margin-top: 72px;" >
+                        </div>
+                        <div v-if="showVipList.length >2 && showVipList[2].name!=null" style="color: white;font-size: 64px;margin-top: -10px">{{showVipList[2].name}}</div>
+                        <img :src="vipPic" style="margin-top: 20px; width: 100%"/>
+                        <img :src="vipPicShadow" style="margin-top: 10px; width: 90%"/>
+                    </el-col>
+                </el-row>
+            </el-col>
+            <el-col :span="5" style="margin-top:250px">
+                <div style=" color: white;font-size: x-large;margin-left: 86px">
 
-    </div >
+                </div>
+            </el-col>
+        </el-row>
+
+    </div>
 
 </template >
 
 <script >
-    $(document).ready(function () {
-        $('#img-slider li').bind({
-            reposition: function () {
-                // var degrees = $(this).data('roundabout').degrees,
-                //     roundaboutBearing = $(this).parent().data('roundabout').bearing,
-                //     rotateY = Math.sin((roundaboutBearing - degrees) * (Math.PI/180)) * 9;
-                //
-                // $(this).css({
-                //     "-webkit-transform": 'rotate(' + rotateY + 'deg)',
-                //     "-moz-transform": 'rotate(' + rotateY + 'deg)',
-                //     "-ms-transform": 'rotate(' + rotateY + 'deg)',
-                //     "-o-transform": 'rotate(' + rotateY + 'deg)',
-                //     "transform": 'rotate(' + rotateY + 'deg)'
-                // });
-            }
-        });
-
-        $('.jQ_sliderPrev').on('click', function () {
-            $('#img-slider').roundabout('animateToNextChild');
-
-            return false;
-        });
-
-        $('.jQ_sliderNext').on('click', function () {
-            $('#img-slider').roundabout('animateToPreviousChild');
-
-            return false;
-        });
-
-        $('.jQ_sliderSwitch li').on('click', function () {
-            var $elem = $(this);
-            var index = $elem.index();
-
-            $('#img-slider').roundabout('animateToChild', index);
-
-            return false;
-        });
-
-        $('#img-slider').roundabout({
-            minScale: 1.0,
-            maxScale: 1.0,
-            duration: 750
-        }).bind({
-            animationEnd: function (e) {
-//			    updateIndex(); //动画执行完后，更新当前index等数据
-//                var index = $('#img-slider').roundabout('getChildInFocus');
-//                $('.jQ_sliderSwitch li').removeClass('active');
-//                $('.jQ_sliderSwitch li').eq(index).addClass('active');
-            }
-        });
-
-    });
-    const TotalItems = 6;
-    var photoIndex = 0 // 当前正中间的元素，执行动画后变到右边
-    var rightIndex = 1; //当前最右边的index
-    var emptyList = [0, 1, 2, 3, 4, 5];
-    var currentShowList = [5, 0, 1];
-    var isneedPlay = false;
-    function showUserAndPlay(dataList) {
-        while (dataList.length > 0) {
-            let removeToIndex = 0;
-            for (let i = 0; i < 1; i++) {
-                removeToIndex = i + 1;
-                let data = dataList[i];
-
-                let index = 0;
-                let isEmpty = false;
-                let nextIndex = 0;
-                for (let j = 0; j < currentShowList.length; j++) {
-                    index = rightIndex - j;
-                    if (index < 0) {
-                        index += TotalItems;
-                    }
-                    for (let eItem of emptyList) {
-                        if (eItem == index) {
-                            isEmpty = true;
-                            break
-                        }
-                    }
-                    if (isEmpty) {
-                        if (rightIndex == index) {
-                            nextIndex = index - 1;
-                            if (nextIndex < 0) {
-                                nextIndex += TotalItems;
-                            }
-                            isneedPlay = true;
-                        } else {
-                            nextIndex = index;
-                            isneedPlay = false;
-                        }
-                        break;
-                    }
-                }
-                if (!isEmpty) {
-                    nextIndex = photoIndex - 2;
-                    if (nextIndex < 0) {
-                        nextIndex += TotalItems;
-                    }
-                    isneedPlay = true;
-                }
-                if (_this.recentList.length >= 10) {
-                    _this.recentList.splice(0, 1);
-                }
-                _this.recentList.push(Object.assign(data));
-                _this.userList.splice(nextIndex, 1, Object.assign(data))
-                emptyList.splice(emptyList.indexOf(nextIndex), 1)
-                if (isneedPlay) {
-                    playAnimationToNext();
-                }
-
-            }
-            if (removeToIndex > 0) {
-                dataList.splice(0, removeToIndex);
-            }
-            sleep(200)
-        }
-    }
-
-    function playAnimationTry(count = 0) {
-        setTimeout(() => {
-            if (count > 3) {
-                return;
-            }
-            try {
-                $('#img-slider').roundabout('animateToPreviousChild');
-
-            } catch (e) {
-                sleep(1000)
-                playAnimationTry(++count)
-            }
-        }, 100);
-    }
-
-    function playAnimationToNext() {
-        let promise = new Promise(function (resolve, reject) {
-            playAnimationTry();
-            updateIndex(); //动画执行完后，更新当前index等数据
-            resolve();
-        });
-    }
-
-    function updateIndex() {
-        photoIndex--;
-        if (photoIndex < 0) {
-            photoIndex += TotalItems;
-        }
-        rightIndex = photoIndex + 1;
-        if (rightIndex > TotalItems - 1) {
-            rightIndex -= TotalItems;
-        }
-        let leftIndex = photoIndex - 1;
-        if (leftIndex < 0) {
-            leftIndex += TotalItems;
-        }
-        currentShowList = [leftIndex, photoIndex, rightIndex];
-
-        let index = rightIndex + 2;
-        if (index > TotalItems - 1) {
-            index -= TotalItems;
-        }
-        _this.userList.splice(index, 1, {})//把上次显示过的设置为空对象
-        let isHasExist = false;
-        for (let eitem of emptyList) {
-            if (eitem == index) {
-                isHasExist = true;
-                break;
-            }
-        }
-        if (!isHasExist) {
-            emptyList.push(index);
-        }
-    }
-
-    import Vue from 'vue'
     var _this
     export default {
         name: "VipPage",
@@ -223,28 +76,40 @@
         data() {
             _this = this;
             return {
-                userList: [],
-                recentList: [],
+                showVipList: [],
+                recentVipList: [],
+                vipPic:require('../assets/img/text_VIP.png'),
+                vipPicShadow:require('../assets/img/VIP_shadow.png'),
             }
         },
         methods: {
-            updateData(dataList)
-            {
-                console.log(`vip updateData: ${dataList.length}`)
-                showUserAndPlay(dataList);
+            updateData(dataList) {
+                for(let i=0; i< dataList.length; i++) {
+                    if (_this.recentVipList.length >= 5) {
+                        _this.recentVipList.splice(0, 1);
+                    }
+                    _this.recentVipList.push(Object.assign(dataList[i]));
+                }
+                _this.showVipList.splice(0,_this.showVipList.length);
+                for(let j= _this.recentVipList.length-1; j>=0 && _this.showVipList.length < 3; j--) {
+                    _this.showVipList.push(_this.recentVipList[j]);
+                }
             },
+            getSmallPhoneBg() {
+                return "background-image: " + "url(" + require('../assets/img/small_portrait_back.png') + "); background-repeat:no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;height:90px;width:90px";
+            },
+            getShowPhoneBg() {
+                return "background-image: " + "url(" + require('../assets/img/portrait_ring.png') + "); background-repeat:no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;width:400px;height:400px";
+            }
         },
         computed: {},
         filters: {},
         created: function () {
 
+
         },
         mounted: function () {
-            //初始化加入默认元素
-            for (let i = 0; i < TotalItems; i++) {
-                _this.userList.unshift({});
-                _this.recentList.push({});
-            }
+
         },
         destroyed: function () {
 

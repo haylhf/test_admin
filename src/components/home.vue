@@ -1,17 +1,16 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml" >
     <div >
-
-        <!--<video :src="getBgVideo()"-->
-        <!--style="right:0; bottom: 0; z-index: -100;min-width: 100%;min-height: 100%;position: fixed;height: auto;width: auto;-webkit-filter: grayscale(20%)"-->
-        <!--loop="loop" autoplay="autoplay" muted ></img >-->
-        <img :src="getBgVideo()"
+        <img :src="getBgImg()"
              style="min-width: 100%;min-height: 100%;position: fixed;z-index: -100;right:0; bottom: 0;" />
         <div class="homeDiv" >
             <el-row style="margin-top: 30px" >
                 <el-col :offset="5" :span="3" style="text-align: center" >
                     <span style="font-size: 30px;color: white;font-weight: lighter" >{{currentTime}}</span >
                 </el-col >
-                <el-col :offset="2" :span="4" style="text-align: center;margin-top: 30px" >
+                <el-col :offset="2" :span="4" style="text-align: center;margin-top: 30px" v-if="isShowVIP">
+                    <img src="../assets/img/welcome.png"/>
+                </el-col >
+                <el-col :offset="2" :span="4" style="text-align: center;margin-top: 30px" v-else>
                     <span style="font-size: 40px;color: white;" >{{title}}</span >
                 </el-col >
                 <el-col :offset="2" :span="4" style="text-align: center" >
@@ -244,8 +243,14 @@
 			    ));//方法1
 		    },
 
-		    getBgVideo() {
-			    return require('../assets/img/bg.png');
+		    getBgImg() {
+		        var bg;
+		        if(_this.isShowVIP) {
+		            bg = require('../assets/img/bg_gold.png')
+                } else {
+		            bg = require('../assets/img/bg.png')
+                }
+			    return bg;
 		    },
 		    onSend() {
 			    let strMsg = _this.sendText;// document.getElementById("msg").value;
@@ -271,32 +276,32 @@
 		    currentInterval = setInterval(function doAnimation() {
 
 			    _this.currentTime = new Date().format("MM月dd日 hh:mm");
-//			    $.ajax({
-//				    url: HOST + "user/getStaffNum",
-//				    type: 'GET',
-//				    dataType: 'json',
-//				    success: function (data) {
-//					    if (data.code == 200) {
-//						    _this.staffNum = data.data;
-//					    }
-//				    },
-//				    error: function (data) {
-//
-//				    }
-//			    })
-//			    $.ajax({
-//				    url: HOST + "user/getStaffSignInNum",
-//				    type: 'GET',
-//				    dataType: 'json',
-//				    success: function (data) {
-//					    if (data.code == 200) {
-//						    _this.signInNum = data.data;
-//					    }
-//				    },
-//				    error: function (data) {
-//
-//				    }
-//			    })
+			    $.ajax({
+				    url: HOST + "user/getStaffNum",
+				    type: 'GET',
+				    dataType: 'json',
+				    success: function (data) {
+					    if (data.code == 200) {
+						    _this.staffNum = data.data;
+					    }
+				    },
+				    error: function (data) {
+
+				    }
+			    })
+			    $.ajax({
+				    url: HOST + "user/getStaffSignInNum",
+				    type: 'GET',
+				    dataType: 'json',
+				    success: function (data) {
+					    if (data.code == 200) {
+						    _this.signInNum = data.data;
+					    }
+				    },
+				    error: function (data) {
+
+				    }
+			    })
 
 		    }, 1000);//定时器
 

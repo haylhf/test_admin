@@ -12,7 +12,7 @@
                                     {{u.name}}
                                 </div >
                                 <span style="font-size: 24px;" >
-                                        {{u.signTime}}-{{u.index}}
+                                    {{u.signTime}}
                                     </span >
                             </div >
                         </li >
@@ -154,7 +154,7 @@
 		    if (removeToIndex > 0) {
 			    dataList.splice(0, removeToIndex);
 		    }
-		    sleep(200)
+		    sleep(800)
 	    }
     }
 
@@ -167,10 +167,11 @@
 			    $('#img-slider').roundabout('animateToPreviousChild');
 
 		    } catch (e) {
+		        console.log("playAnimationTry: "+e);
 			    sleep(1000)
 			    playAnimationTry(++count)
 		    }
-	    }, 100);
+	    }, 500);
     }
 
     function playAnimationToNext() {

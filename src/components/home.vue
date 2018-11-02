@@ -148,21 +148,30 @@
 			    dataList.push(data);
 
 		    }
-		    let promise = new Promise(function (resolve, reject) {
-			    if (_this.isShowVIP) {
-				    if (_this.$refs.vipPage) {
-                        _this.$refs.vipPage.updateData(dataList);
-				    }
-			    } else {
-				    if (_this.$refs.staffPage) {
-					    _this.$refs.staffPage.updateData(dataList);
-				    }
-			    }
-			    resolve();
-		    });
-		    promise.then(() => {
-			    isLoading = false;
-		    });
+            if (_this.isShowVIP) {
+                if (_this.$refs.vipPage) {
+                    _this.$refs.vipPage.updateData(dataList);
+                }
+            } else {
+                if (_this.$refs.staffPage) {
+                    _this.$refs.staffPage.updateData(dataList);
+                }
+            }
+//		    let promise = new Promise(function (resolve, reject) {
+//			    if (_this.isShowVIP) {
+//				    if (_this.$refs.vipPage) {
+//                        _this.$refs.vipPage.updateData(dataList);
+//				    }
+//			    } else {
+//				    if (_this.$refs.staffPage) {
+//					    _this.$refs.staffPage.updateData(dataList);
+//				    }
+//			    }
+//			    resolve();
+//		    });
+//		    promise.then(() => {
+//			    isLoading = false;
+//		    });
 	    } catch (e) {
 		    console.log(e)
 	    } finally {

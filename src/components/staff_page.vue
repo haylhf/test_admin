@@ -24,12 +24,12 @@
             <tr >
                 <td style="width: 5%;" ></td >
                 <td style="text-align: center; vertical-align: middle;" v-for="u in recentList" >
-                    <div class="text-center" style="width: 120px;">
-                        <img  v-if="u.photo!=null" :src="u.photo"
-                              style="width: 120px;height: 120px;
+                    <div class="text-center" style="width: 120px;" >
+                        <img v-if="u.photo!=null" :src="u.photo"
+                             style="width: 120px;height: 120px;
                           margin-left: 5px;margin-right: 5px; border-radius: 50%;
                           align-items: center;justify-content: center;" >
-                    </div>
+                    </div >
                 </td >
                 <td style="width: 5%;" ></td >
             </tr >
@@ -83,7 +83,7 @@
 		    duration: 750
 	    }).bind({
 		    animationEnd: function (e) {
-//			    updateIndex(); //动画执行完后，更新当前index等数据
+			    updateIndex(); //动画执行完后，更新当前index等数据
 //                var index = $('#img-slider').roundabout('getChildInFocus');
 //                $('.jQ_sliderSwitch li').removeClass('active');
 //                $('.jQ_sliderSwitch li').eq(index).addClass('active');
@@ -97,12 +97,12 @@
     var emptyList = [0, 1, 2, 3, 4, 5];
     var currentShowList = [5, 0, 1];
     var isneedPlay = false;
-    function showUserAndPlay(dataList) {
-	    while (dataList.length > 0) {
+    function showUserAndPlay() {
+	    while (_this.dataList.length > 0) {
 		    let removeToIndex = 0;
-		    for (let i = 0; i < 1; i++) {
+		    for (let i = 0; i < _this.dataList.length; i++) {
 			    removeToIndex = i + 1;
-			    let data = dataList[i];
+			    let data = _this.dataList[i];
 
 			    let index = 0;
 			    let isEmpty = false;
@@ -149,12 +149,11 @@
 			    if (isneedPlay) {
 				    playAnimationToNext();
 			    }
-
+			    sleep(600)
 		    }
 		    if (removeToIndex > 0) {
-			    dataList.splice(0, removeToIndex);
+			    _this.dataList.splice(0, removeToIndex);
 		    }
-		    sleep(800)
 	    }
     }
 
@@ -164,10 +163,10 @@
 			    return;
 		    }
 		    try {
-			    $('#img-slider').roundabout('animateToPreviousChild');
-
+			    $('#img-slider').roundabout('animateToChild', photoIndex);//
+//                $('#img-slider').roundabout('animateToPreviousChild');
 		    } catch (e) {
-		        console.log("playAnimationTry: "+e);
+			    console.log("playAnimationTry: " + e);
 			    sleep(1000)
 			    playAnimationTry(++count)
 		    }
@@ -175,18 +174,18 @@
     }
 
     function playAnimationToNext() {
-	    let promise = new Promise(function (resolve, reject) {
-		    playAnimationTry();
-		    updateIndex(); //动画执行完后，更新当前index等数据
-		    resolve();
-	    });
-    }
-
-    function updateIndex() {
 	    photoIndex--;
 	    if (photoIndex < 0) {
 		    photoIndex += TotalItems;
 	    }
+	    playAnimationTry();
+    }
+
+    function updateIndex() {
+//	    photoIndex--;
+//	    if (photoIndex < 0) {
+//		    photoIndex += TotalItems;
+//	    }
 	    rightIndex = photoIndex + 1;
 	    if (rightIndex > TotalItems - 1) {
 		    rightIndex -= TotalItems;
@@ -224,13 +223,21 @@
 		    return {
 			    userList: [],
 			    recentList: [],
+			    dataList: [],
 		    }
 	    },
 	    methods: {
-		    updateData(dataList)
+		    updateData(list)
 		    {
-			    console.log(`staff updateData: ${dataList.length}`)
-			    showUserAndPlay(dataList);
+			    console.log(`staff updateData: ${list.length}`)
+
+			    if (_this.dataList.length > 0) {
+				    _this.dataList = _this.dataList.concat(list);
+			    }
+			    else {
+				    _this.dataList = list;
+				    showUserAndPlay();
+			    }
 		    },
 	    },
 	    computed: {},

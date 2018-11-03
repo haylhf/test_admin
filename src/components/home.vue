@@ -20,12 +20,18 @@
             </el-row >
         </div >
         <VipPage ref="vipPage" v-if="isShowVIP" ></VipPage >
-        <StaffPage ref="staffPage" v-else ></StaffPage >
+        <StaffSignPage ref="staffPage" v-else ></StaffSignPage >
+        <!--<StaffPage ref="staffPage" v-else ></StaffPage >-->
     </div >
 
 </template >
 
 <script >
+     $(document).ready(function () {
+         client.connect(options);//连接服务器并注册连接成功处理事件
+         client.onConnectionLost = onConnectionLost;//注册连接断开处理事件
+         client.onMessageArrived = onMessageArrived;//注册消息接收处理事件
+     })
     var isLoading = false;
     var hostname = MqttServer,
 		    port = ServerPort,
@@ -82,13 +88,7 @@
     };
 
     window.onclick = () => {
-	    requestFullScreen();
-    };
-    window.onload = function () {
-
-	    client.connect(options);//连接服务器并注册连接成功处理事件
-	    client.onConnectionLost = onConnectionLost;//注册连接断开处理事件
-	    client.onMessageArrived = onMessageArrived;//注册消息接收处理事件
+	    //requestFullScreen();
     };
 
     function onConnectionLost(responseObject) {
@@ -184,12 +184,14 @@
     import Vue from 'vue'
     import StaffPage from '../components/staff_page.vue';
     import VipPage from '../components/vip_page.vue';
+    import StaffSignPage from '../components/staffsign_page.vue';
 
     export default {
 	    name: "home",
 	    components: {
 		    StaffPage,
 		    VipPage,
+            StaffSignPage,
 	    },
 	    data() {
 		    _this = this;

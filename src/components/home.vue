@@ -125,7 +125,7 @@
 				     console.log("未知主题消息...")
 				     break;
 		     }
-		     console.log(`show UI VIP:${isShowVIP}`);
+		     console.log(`show UI VIP:${_this.isShowVIP}`);
 	     }
      }
 
@@ -143,8 +143,8 @@
 			     } catch (e) {
 			     }
 			     data.device_id = signData.device_id;
-			     data.photo = require('../assets/img/male.png'); //`http://api.vaiwan.com:8081/image/${signData.person.face_list[0].face_image_id}`;
-			     //data.photo = "http://192.168.0.119" + ":9812/image/" + signData.person.face_list[0].face_image_id; //`http://api.vaiwan.com:8081/image/${signData.person.face_list[0].face_image_id}`;
+			     //data.photo = require('../assets/img/male.png'); //`http://api.vaiwan.com:8081/image/${signData.person.face_list[0].face_image_id}`;
+                 data.photo = `http://api.vaiwan.com:8081/image/${signData.person.face_list[0].face_image_id}`;
 			     dataList.push(data);
 
 		     }

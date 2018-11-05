@@ -8,9 +8,9 @@
 
             </el-row >
             <el-row style="margin-top:150px;" >
-                 <el-col :span="16" :offset="4" >
-                    <div style="float: left;" v-for="u in recentList" >
-                            <div class="text-center" style="width: 120px;margin-left: 10px;" >
+                 <el-col :span="18" :offset="3" >
+                    <div style="float: left; padding-left: 10px;" v-for="u in recentList" >
+                            <div class="text-center">
                                 <img v-if="u.photo!=null" :src="u.photo"
                                      style="width: 120px;height: 120px;
                                   margin-left: 5px;margin-right: 5px; border-radius: 50%;
@@ -70,14 +70,15 @@
 
 	    imgObj.innerHTML = `
                        <img src="${data.photo}"
-                             style="width: 225px;height: 225px;border-radius: 50%;" />
+                             style="width: 225px;height: 225px;border-radius: 50%;margin-top: 10px;" />
                        <div class="col-center-block text-center label" >
-                            <div style="margin-top: 10px;font-size: 30px;" >
+                            <div style="margin-top: 20px;font-size: 30px;" >
                                 ${data.name}
                             </div >
-                            <span style="font-size: 30px;margin-top: 10px" >
+                            <br/>
+                            <span style="font-size: 30px;" >
                                 ${data.signTime}
-                                </span >
+                            </span >
                        </div >`;
 
 	    setTimeout(() => {

@@ -19,8 +19,8 @@
                 </el-col >
             </el-row >
         </div >
-        <VipPage ref="vipPage" v-if="isShowVIP" ></VipPage >
-        <StaffSignPage ref="staffPage" v-else ></StaffSignPage >
+        <VipPage ref="vipPage" v-show="isShowVIP" ></VipPage >
+        <StaffSignPage ref="staffPage" v-show="!isShowVIP" ></StaffSignPage >
 	    <!--<StaffPage ref="staffPage" v-else ></StaffPage >-->
     </div >
 
@@ -108,17 +108,20 @@
 	     } catch (e) {
 		     console.log(e);
 	     }
-	     while (isLoading) {
-		     sleep(1000); //wait;
-	     }
+	     // while (isLoading) {
+		  //    sleep(1000); //wait;
+	     // }
 	     if (data != null) {
 		     switch (message.destinationName) {
 			     case ServerTOPIC[0]: //statff
-				     _this.isShowVIP = false;
+				     //_this.isShowVIP = false;
 				     onVisitorSign(data);
 				     break;
 			     case ServerTOPIC[1]://vip
 				     _this.isShowVIP = true;
+				     setTimeout(()=>{
+				         _this.isShowVIP = false;
+                     }, 10000)
 				     onVisitorSign(data);
 				     break;
 			     default:
@@ -130,7 +133,7 @@
      }
 
      function onVisitorSign(signDataList) {
-	     isLoading = true;
+	     // isLoading = true;
 	     var dataList = [];
 	     try {
 		     console.log(signDataList.length)
@@ -148,15 +151,15 @@
 			     dataList.push(data);
 
 		     }
-		     if (_this.isShowVIP) {
+		     //if (_this.isShowVIP) {
 			     if (_this.$refs.vipPage) {
 				     _this.$refs.vipPage.updateData(dataList);
 			     }
-		     } else {
+		     //} else {
 			     if (_this.$refs.staffPage) {
 				     _this.$refs.staffPage.updateData(dataList);
 			     }
-		     }
+		     //}
 //		    let promise = new Promise(function (resolve, reject) {
 //			    if (_this.isShowVIP) {
 //				    if (_this.$refs.vipPage) {

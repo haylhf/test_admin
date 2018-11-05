@@ -1,18 +1,18 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml" >
     <div >
             <el-row style="margin-top:150px;" >
-                <el-col :span="12" :offset="6" >
+                <el-col :span="16" :offset="4" >
                     <div id="rootDiv" class="col-center-block text-center" >
                     </div >
                 </el-col >
 
             </el-row >
-            <el-row style="margin-top:150px;" >
-                 <el-col :span="18" :offset="3" >
-                    <div style="float: left; padding-left: 10px;" v-for="u in recentList" >
+            <el-row style="margin-top:300px;" >
+                 <el-col :span="10" :offset="7" >
+                    <div style="float: left;" v-for="u in recentList" >
                             <div class="text-center">
                                 <img v-if="u.photo!=null" :src="u.photo"
-                                     style="width: 120px;height: 120px;
+                                     style="width: 90px;height: 90px;
                                   margin-left: 5px;margin-right: 5px; border-radius: 50%;
                                   align-items: center;justify-content: center;" >
                             </div >
@@ -38,8 +38,8 @@
     function playDisappearAnimation(callback, obj) {
 	    setTimeout(() => {
 		    if (obj) {
-			    obj.style.animation = `animtran 0.6s linear`
-			    obj.style.webkitAnimation = `animtran 0.6s linear;`
+			    obj.style.animation = `animtran 0.5s linear`
+			    obj.style.webkitAnimation = `animtran 0.5s linear;`
 			    obj.title = 'delete';
 			    callback(obj);
 			    console.log(`playDisappearAnimation`)
@@ -65,20 +65,19 @@
 	    var imgObj = document.createElement("div");
 	    imgObj.className = "liDiv";
 
-	    imgObj.style.height = imgHeight + 'px';
-	    imgObj.style.width = imgWidth + 'px';
+	    // imgObj.style.height = imgHeight + 'px';
+	    // imgObj.style.width = imgWidth + 'px';
 
 	    imgObj.innerHTML = `
                        <img src="${data.photo}"
-                             style="width: 225px;height: 225px;border-radius: 50%;margin-top: 10px;" />
+                             style="width: 225px;height: 225px;border-radius: 50%;margin-top:80px" />
                        <div class="col-center-block text-center label" >
-                            <div style="margin-top: 20px;font-size: 30px;" >
+                            <div style="margin-top: 30px; margin-bottom:30px; font-size: 30px;" >
                                 ${data.name}
                             </div >
-                            <br/>
-                            <span style="font-size: 30px;" >
+                            <span style="font-size: 25px;margin-top: 20px" >
                                 ${data.signTime}
-                            </span >
+                                </span >
                        </div >`;
 
 	    setTimeout(() => {
@@ -90,8 +89,7 @@
 					    root.appendChild(imgObj);
 				    }, item);
 			    }, obj);
-		    }
-		    else {
+		    } else {
 			    root.appendChild(imgObj);
 		    }
 		    if (_this.recentList.length >= 10) {
@@ -99,18 +97,14 @@
 		    }
 		    _this.recentList.push(Object.assign(data));//下边列表
 		    _this.dataList.splice(0, 1);
-		    sleep(500)
+		    sleep(400)
 		    callback();
 	    }, 0);
     }
 
     function showUserAndPlay() {
 	    while (_this.dataList.length > 0) {
-		    let data = null;
-		    for (let i = 0; i < 1; i++) {
-			    data = _this.dataList[i];
-			    break;
-		    }
+		    let data = _this.dataList[0];
 		    setTimeout(() => {
 			    callAnimation(()=> {
 				    showUserAndPlay();
@@ -140,12 +134,9 @@
 
 			    if (_this.dataList.length > 0) {
 				    _this.dataList = _this.dataList.concat(list);
-			    }
-			    else {
+			    } else {
 				    _this.dataList = list;
-				    setTimeout(() => {
-					    showUserAndPlay();
-				    }, 0);
+                    showUserAndPlay();
 			    }
 		    },
 	    },
@@ -179,9 +170,13 @@
      }
 
      .liDiv {
-	     border: green solid 0.5px;
-
+         background-image: url('../assets/img/photo_bg.png');
+         background-repeat: no-repeat;
+         background-size: 500px 560px;
+         background-position: center;
+         width: 500px;
+         height: 560px;
 	     float: left;
-	     margin-left: 10px;
+	     margin-left: 50px;
      }
 </style >

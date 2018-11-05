@@ -3,6 +3,22 @@
             <el-row style="margin-top:150px;" >
                 <el-col :span="12" :offset="6" >
                     <div id="rootDiv" class="col-center-block text-center" >
+                         <transition name="el-zoom-in-center" v-for="data in userList" >
+                            <div v-show="data.show" style="float: left;  border: green solid 0.5px;
+                                 float: left;
+                                 margin-left: 10px;" >
+                                <img :src="data.photo"
+                                     style="width: 225px;height: 225px;border-radius: 50%;" />
+                                <div class="col-center-block text-center label" >
+                                        <div style="margin-top: 10px;font-size: 30px;" >
+                                            {{data.name}}
+                                        </div >
+                                        <span style="font-size: 30px;margin-top: 10px" >
+                                            {{data.signTime}}
+                                        </span >
+                                </div >
+                            </div >
+                         </transition >
                     </div >
                 </el-col >
 
@@ -25,6 +41,7 @@
 </template >
 
 <script >
+
     $(document).ready(function () {
 //        imgHeight = (window.innerHeight - 100) / 3;
 //        imgWidth = imgHeight * 3 / 4;
@@ -35,70 +52,48 @@
     var root = null;
     const TotalItems = 3;
 
-    function playDisappearAnimation(callback, obj) {
-	    setTimeout(() => {
-		    if (obj) {
-			    obj.style.animation = `animtran 0.6s linear`
-			    obj.style.webkitAnimation = `animtran 0.6s linear;`
-			    obj.title = 'delete';
-			    callback(obj);
-			    console.log(`playDisappearAnimation`)
-		    }
-	    }, 0);
-    }
-
-    function deleteUser(callback, item) {
-	    setTimeout(() => {
-		    if (item != null) {
-			    root.removeChild(item);
-			    console.log(`delete old user`)
-		    }
-		    sleep(500)
-		    callback();
-	    }, 0);
-    }
-
-    function callAnimation(callback, data) {
-	    if (root == null) {
-		    root = document.getElementById("rootDiv");
+    function playDisappearAnimation(obj) {
+	    if (obj) {
+		    obj.style.animation = `animtran 0.6s linear`
+		    obj.style.webkitAnimation = `animtran 0.6s linear;`
+		    obj.title = 'delete';
+		    setTimeout(() => {
+			    sleep(1000)
+			    if (obj != null) {
+				    root.removeChild(obj);
+				    console.log(`delete old user`)
+			    }
+		    }, 0);
+		    console.log(`playDisappearAnimation`)
 	    }
-	    var imgObj = document.createElement("div");
-	    imgObj.className = "liDiv";
+    }
 
-	    imgObj.style.height = imgHeight + 'px';
-	    imgObj.style.width = imgWidth + 'px';
-
-	    imgObj.innerHTML = `
-                       <img src="${data.photo}"
-                             style="width: 225px;height: 225px;border-radius: 50%;" />
-                       <div class="col-center-block text-center label" >
-                            <div style="margin-top: 10px;font-size: 30px;" >
-                                ${data.name}
-                            </div >
-                            <span style="font-size: 30px;margin-top: 10px" >
-                                ${data.signTime}
-                                </span >
-                       </div >`;
-
+    function deleteUser(callback) {
 	    setTimeout(() => {
-		    if (root != null && root.childElementCount >= TotalItems) {
-			    //先动画变小，动画执行完再删除
-			    var obj = root.childNodes[0];
-			    playDisappearAnimation((item)=> {
-				    deleteUser(()=> {
-					    root.appendChild(imgObj);
-				    }, item);
-			    }, obj);
-		    }
-		    else {
-			    root.appendChild(imgObj);
-		    }
+		    _this.userList.splice(0, 1);
+		    callback();
+	    }, 800);
+    }
+    function callAnimation(callback, data) {
+	    data.show = true;
+	    setTimeout(() => {
 		    if (_this.recentList.length >= 10) {
 			    _this.recentList.splice(0, 1);
 		    }
 		    _this.recentList.push(Object.assign(data));//下边列表
+
+		    if (_this.userList.length >= TotalItems) {
+			    _this.userList[0].show = false;
+                deleteUser(()=> {
+				    _this.userList.push(data)
+			    });
+		    }
+		    else {
+//			    _this.userList[_this.userList.length - 1].show = true;
+			    _this.userList.push(data)
+		    }
 		    _this.dataList.splice(0, 1);
-		    sleep(500)
+		    sleep(200)
 		    callback();
 	    }, 0);
     }
@@ -114,7 +109,7 @@
 			    callAnimation(()=> {
 				    showUserAndPlay();
 			    }, data);
-		    }, 300);
+		    },300);
 		    break;
 	    }
     }

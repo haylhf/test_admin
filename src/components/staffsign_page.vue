@@ -7,13 +7,13 @@
                 </el-col >
 
             </el-row >
-            <el-row style="margin-top:300px;" >
-                 <el-col :span="10" :offset="7" >
+            <el-row style="margin-top:150px;" >
+                 <el-col :span="12" :offset="6" >
                     <div style="float: left;" v-for="u in recentList" >
                             <div class="text-center">
                                 <img v-if="u.photo!=null" :src="u.photo"
                                      style="width: 90px;height: 90px;
-                                  margin-left: 5px;margin-right: 5px; border-radius: 50%;
+                                  margin-left: 5px; border-radius: 50%;
                                   align-items: center;justify-content: center;" >
                             </div >
                     </div >
@@ -172,11 +172,11 @@
      .liDiv {
          background-image: url('../assets/img/photo_bg.png');
          background-repeat: no-repeat;
-         background-size: 500px 560px;
+         background-size: 400px 500px;
          background-position: center;
-         width: 500px;
-         height: 560px;
+         width: 400px;
+         height: 500px;
 	     float: left;
-	     margin-left: 50px;
+	     margin-left: 20px;
      }
 </style >

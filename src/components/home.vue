@@ -1,26 +1,28 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml" >
     <div >
-        <img :src="getBgImg()"
-             style="min-width: 100%;min-height: 100%;position: fixed;z-index: -100;right:0; bottom: 0;" />
-        <div class="homeDiv" >
-            <el-row style="margin-top: 30px" >
-                <el-col :offset="5" :span="3" style="text-align: center" >
-                    <span style="font-size: 30px;color: white;font-weight: lighter" >{{currentTime}}</span >
-                </el-col >
-                <el-col :offset="2" :span="4" style="text-align: center;margin-top: 30px" v-if="isShowVIP" >
-                    <img src="../assets/img/welcome.png" />
-                </el-col >
-                <el-col :offset="2" :span="4" style="text-align: center;margin-top: 30px" v-else >
-                    <span style="font-size: 40px;color: white;" >{{title}}</span >
-                </el-col >
-                <el-col :offset="2" :span="4" style="text-align: center" >
-                    <span style="font-size: 28px;color: white;font-weight: lighter" @click="btnTest" >签到：</span >
-                    <span style="font-size: 30px;color: white;font-weight: lighter" >{{getSignIn()}}</span >
-                </el-col >
-            </el-row >
-        </div >
-        <VipPage ref="vipPage" v-show="isShowVIP" ></VipPage >
-        <StaffSignPage ref="staffPage" v-show="!isShowVIP" ></StaffSignPage >
+        <img :src="getBgImg()" style="min-width: 100%;min-height: 100%;position: fixed;z-index: -100;right:0; bottom: 0;" v-show="!showAD"/>
+        <div v-show="!showAD">
+            <div class="homeDiv" >
+                <el-row style="margin-top: 30px" >
+                    <el-col :offset="5" :span="3" style="text-align: center" >
+                        <span style="font-size: 30px;color: white;font-weight: lighter" >{{currentTime}}</span >
+                    </el-col >
+                    <el-col :offset="2" :span="4" style="text-align: center;margin-top: 30px" v-if="isShowVIP" >
+                        <img src="../assets/img/welcome.png" />
+                    </el-col >
+                    <el-col :offset="2" :span="4" style="text-align: center;margin-top: 30px" v-else >
+                        <span style="font-size: 40px;color: white;" >{{title}}</span >
+                    </el-col >
+                    <el-col :offset="2" :span="4" style="text-align: center" >
+                        <span style="font-size: 28px;color: white;font-weight: lighter" @click="btnTest" >签到：</span >
+                        <span style="font-size: 30px;color: white;font-weight: lighter" >{{getSignIn()}}</span >
+                    </el-col >
+                </el-row >
+            </div >
+            <VipPage ref="vipPage" v-show="isShowVIP" ></VipPage >
+            <StaffSignPage ref="staffPage" v-show="!isShowVIP" ></StaffSignPage >
+        </div>
+        <video :src="getVideoBg()" autoplay  muted loop style="min-width: 100%;min-height: 100%;position: fixed;z-index: -100;right:0; bottom: 0;" v-show="showAD"></video>
 	    <!--<StaffPage ref="staffPage" v-else ></StaffPage >-->
     </div >
 
@@ -137,8 +139,16 @@
 	     var dataList = [];
 	     try {
 		     console.log(signDataList.length)
-		     for (let i = 0; i < signDataList.length; i++) {
+             _this.showAD = false;
+             //清除之前的timer，一分钟如果没有考勤信息过来，开始播放宣传片
+             if(showADTimerId != null) {
+                 clearTimeout(showADTimerId);
+             }
+             showADTimerId = setTimeout(()=>{
+                 _this.showAD = true;
+             }, 1000*60);
 
+		     for (let i = 0; i < signDataList.length; i++) {
 			     let signData = signDataList[i];
 			     let data = Object.assign(signData.person.person_information);
 			     try {
@@ -151,30 +161,12 @@
 			     dataList.push(data);
 
 		     }
-		     //if (_this.isShowVIP) {
-			     if (_this.$refs.vipPage) {
-				     _this.$refs.vipPage.updateData(dataList);
-			     }
-		     //} else {
-			     if (_this.$refs.staffPage) {
-				     _this.$refs.staffPage.updateData(dataList);
-			     }
-		     //}
-//		    let promise = new Promise(function (resolve, reject) {
-//			    if (_this.isShowVIP) {
-//				    if (_this.$refs.vipPage) {
-//                        _this.$refs.vipPage.updateData(dataList);
-//				    }
-//			    } else {
-//				    if (_this.$refs.staffPage) {
-//					    _this.$refs.staffPage.updateData(dataList);
-//				    }
-//			    }
-//			    resolve();
-//		    });
-//		    promise.then(() => {
-//			    isLoading = false;
-//		    });
+             if (_this.$refs.vipPage) {
+                 _this.$refs.vipPage.updateData(dataList);
+             }
+             if (_this.$refs.staffPage) {
+                 _this.$refs.staffPage.updateData(dataList);
+             }
 	     } catch (e) {
 		     console.log(e)
 	     } finally {
@@ -184,6 +176,7 @@
 
      var _this;
      var currentInterval;
+     var showADTimerId;
      import Vue from 'vue'
      import StaffPage from '../components/staff_page.vue';
      import VipPage from '../components/vip_page.vue';
@@ -205,6 +198,7 @@
 			     staffNum: 0,
 			     signInNum: 0,
 			     isShowVIP: false,
+                 showAD: true
 		     }
 	     },
 	     methods: {
@@ -349,6 +343,10 @@
 			     }
 			     return bg;
 		     },
+             getVideoBg() {
+                 var bg = require('../assets/img/bg.mp4');
+                 return bg;
+             },
 		     onSend() {
 			     let strMsg = _this.sendText;// document.getElementById("msg").value;
 			     if (strMsg) {
@@ -405,6 +403,7 @@
 	     },
 	     destroyed: function () {
 		     clearInterval(currentInterval);
+             clearTimeout(showADTimerId);
 	     }
      }
 

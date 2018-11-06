@@ -33,17 +33,21 @@
 </template>
 
 <script>
+    var currentInterval;
+    var showADTimerId;
+    var mqttReconnectInterval = null;
     var isLoading = false;
     var hostname = MqttServer,
-            port = ServerPort,
-            clientId = `client-${newGuid()}`,
-            timeout = 5,
-            keepAlive = 100,
-            cleanSession = false,
-            ssl = false,
-            userName = 'admin',
-            password = 'password',
-            sendTopic = "sign_feedback";
+        port = ServerPort,
+        clientId = `client-${newGuid()}`,
+        timeout = 30,
+        keepAlive = 100,
+        qos = 1,
+        cleanSession = false,
+        ssl = false,
+        userName = 'admin',
+        password = 'password',
+        sendTopic = "sign_feedback";
     var client = new Paho.MQTT.Client(hostname, port, clientId);
     //建立客户端实例
     var options = {
@@ -69,8 +73,13 @@
         client.onConnectionLost = onConnectionLost;//注册连接断开处理事件
         client.onMessageArrived = onMessageArrived;//注册消息接收处理事件
     })
+
     function onConnect() {
         console.log("connect successfully");
+        if (mqttReconnectInterval != null) {
+            clearInterval(mqttReconnectInterval);
+            mqttReconnectInterval = null;
+        }
         for (let item of ServerTOPIC)//订阅主题
         {
             console.log(`subscribed server topic: ${item}`);
@@ -98,11 +107,13 @@
 
     function onConnectionLost(responseObject) {
         if (responseObject.errorCode !== 0) {
-            console.log("onConnectionLost:" + responseObject.errorMessage);
             console.log("连接已断开");
-            client.connect(options);
-            client.onConnectionLost = onConnectionLost;//注册连接断开处理事件
-            client.onMessageArrived = onMessageArrived;//注册消息接收处理事件
+            console.log("onConnectionLost:" + responseObject.errorMessage);
+            mqttReconnectInterval = setInterval(() => {
+                client.connect(options);
+                client.onConnectionLost = onConnectionLost;//注册连接断开处理事件
+                client.onMessageArrived = onMessageArrived;//注册消息接收处理事件
+            }, 2000);
         }
     }
 
@@ -122,15 +133,24 @@
         if (data != null) {
             switch (message.destinationName) {
                 case ServerTOPIC[0]: //statff
-                                     //_this.isShowVIP = false;
+                    //_this.isShowVIP = false;
                     onVisitorSign(data);
                     break;
                 case ServerTOPIC[1]://vip
                     _this.isShowVIP = true;
-                    setTimeout(()=> {
+                    setTimeout(() => {
                         _this.isShowVIP = false;
-                    }, 10000)
+                    }, 1000 * 15);
                     onVisitorSign(data);
+                    break;
+                case ServerTOPIC[2]:
+                    alert(ServerTOPIC[2])
+                    if (_this.$refs.vipPage) {
+                        _this.$refs.vipPage.reset();
+                    }
+                    if (_this.$refs.staffPage) {
+                        _this.$refs.staffPage.reset();
+                    }
                     break;
                 default:
                     console.log("未知主题消息...")
@@ -150,9 +170,9 @@
             if (showADTimerId != null) {
                 clearTimeout(showADTimerId);
             }
-            showADTimerId = setTimeout(()=> {
+            showADTimerId = setTimeout(() => {
                 _this.showAD = true;
-            }, 1000 * 60);
+            }, 1000 * 60 * 2);
 
             for (let i = 0; i < signDataList.length; i++) {
                 let signData = signDataList[i];
@@ -181,9 +201,6 @@
     }
 
     var _this;
-    var currentInterval;
-    var showADTimerId;
-    import Vue from 'vue'
     import StaffPage from '../components/staff_page.vue';
     import VipPage from '../components/vip_page.vue';
     import StaffSignPage from '../components/staffsign_page.vue';

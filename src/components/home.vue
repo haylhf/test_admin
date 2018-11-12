@@ -16,7 +16,7 @@
                         <span style="font-size: 40px;color: white;">{{title}}</span>
                     </el-col>
                     <el-col :offset="2" :span="4" style="text-align: center">
-                        <span style="font-size: 28px;color: white;font-weight: lighter" @click="btnTest">签到：</span>
+                        <span style="font-size: 28px;color: white;font-weight: lighter">签到：</span>
                         <span style="font-size: 30px;color: white;font-weight: lighter">{{getSignIn()}}</span>
                     </el-col>
                 </el-row>
@@ -26,7 +26,8 @@
         </div>
         <video :src="getVideoBg()" autoplay muted loop
                style="min-width: 100%;min-height: 100%;position: fixed;z-index: -100;right:0; bottom: 0;"
-               v-show="showAD"></video>
+               v-show="showAD">
+        </video>
         <!--<StaffPage ref="staffPage" v-else ></StaffPage >-->
     </div>
 
@@ -204,6 +205,8 @@
     import StaffPage from '../components/staff_page.vue';
     import VipPage from '../components/vip_page.vue';
     import StaffSignPage from '../components/staffsign_page.vue';
+    var signInBg = require('../assets/img/bg.png');
+    var vipBg = require('../assets/img/bg_gold.png');
 
     export default {
         name: "home",
@@ -360,9 +363,9 @@
             getBgImg() {
                 var bg;
                 if (_this.isShowVIP) {
-                    bg = require('../assets/img/bg_gold.png')
+                    bg = vipBg;
                 } else {
-                    bg = require('../assets/img/bg.png')
+                    bg = signInBg;
                 }
                 return bg;
             },

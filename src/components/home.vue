@@ -145,7 +145,6 @@
                     onVisitorSign(data);
                     break;
                 case ServerTOPIC[2]:
-                    alert(ServerTOPIC[2])
                     if (_this.$refs.vipPage) {
                         _this.$refs.vipPage.reset();
                     }
